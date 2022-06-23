@@ -5,8 +5,8 @@ from typing import Union
 DataKey = Union[str, int]
 DataValue = Union[str, int]
 
-MapperFunction = Callable[[object], None]
-ReducerFunction = Callable[[object, DataKey], None]
+MapperFunction = Callable[[object, DataValue], None]
+ReducerFunction = Callable[[object, DataKey, DataValue], None]
 
 
 class MapReduce:
@@ -27,9 +27,9 @@ class MapReduce:
 
     def execute(self, mapper: MapperFunction, reducer: ReducerFunction):
         for record in self.initial:
-            mapper(record)
+            mapper(self, record)
 
         for key in self.intermediate:
-            reducer(key, self.intermediate[key])
+            reducer(self, key, self.intermediate[key])
 
         self.result.sort()

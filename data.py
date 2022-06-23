@@ -1,10 +1,17 @@
 from replit import db
-from dataclasses import DataClass
 
 
-class Persistence:
-  def save_obj(self, obj: DataClass) -> bool:
-    if obj.id == None:
-      raise AttributeError
+def save_obj(obj: object) -> bool:
+    try:
+        if obj.id is None:
+            raise AttributeError
+    except AttributeError as e:
+        print(e)
+        return False
 
-    obj.
+    key = f'dc_{obj.__name__}_{obj.id}'
+    value = dict(obj)
+
+    db[key] = value
+
+    return True
